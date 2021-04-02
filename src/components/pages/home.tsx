@@ -1,36 +1,48 @@
 import React from 'react'
 import * as THREE from 'three'
+import { PerspectiveCamera, Scene, WebGLRenderer } from 'three'
 
-type Props = {}
+type Props = any
 
 class Homepage extends React.Component<Props, {}> {
-    componentDidMount() {
-        var scene = new THREE.Scene()
-        var camera = new THREE.PerspectiveCamera(
-            75,
-            window.innerWidth / window.innerHeight,
-            0.1,
-            1000
+    el: any
+
+    sceneSetup = () => {
+        // get container dimensions and use them for scene sizing
+        const width = this.el.clientWidth
+        const height = this.el.clientHeight
+
+        this.scene = new THREE.Scene()
+        this.camera = new THREE.PerspectiveCamera(
+            75, // fov = field of view
+            width / height, // aspect ratio
+            0.1, // near plane
+            1000 // far plane
         )
-        var renderer = new THREE.WebGLRenderer()
-        renderer.setSize(window.innerWidth, window.innerHeight)
-        document.body.appendChild(renderer.domElement)
-        var geometry = new THREE.BoxGeometry(1, 1, 1)
-        var material = new THREE.MeshBasicMaterial({ color: 0x00ff00 })
-        var cube = new THREE.Mesh(geometry, material)
-        scene.add(cube)
-        camera.position.z = 5
-        var animate = function () {
-            requestAnimationFrame(animate)
-            cube.rotation.x += 0.01
-            cube.rotation.y += 0.01
-            renderer.render(scene, camera)
-        }
-        animate()
+
+        // set some distance from a cube that is located at z = 0
+        this.camera.position.z = 5
+
+        this.renderer = new THREE.WebGLRenderer()
+        this.renderer.setSize(width, height)
+        this.el.appendChild(this.renderer.domElement) // mount using React ref
+    }
+
+    addCustomSceneObjects = () => {}
+    startAnimationLoop = () => {}
+
+    scene: THREE.Scene = new Scene()
+    camera: THREE.PerspectiveCamera = new PerspectiveCamera()
+    renderer: THREE.WebGLRenderer = new WebGLRenderer()
+
+    componentDidMount() {
+        this.sceneSetup()
+        this.addCustomSceneObjects()
+        this.startAnimationLoop()
     }
 
     render() {
-        return <div>home</div>
+        return <div ref={(ref) => (this.el = ref)}>home</div>
     }
 }
 
