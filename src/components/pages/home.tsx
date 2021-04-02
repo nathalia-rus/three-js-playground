@@ -105,7 +105,7 @@ class Element extends React.Component<Props, {}> {
 
     render() {
         const style = {
-            height: 700, // we can control scene size by setting container dimensions
+            height: '90vh', // we can control scene size by setting container dimensions
         }
 
         return <div style={style} ref={(ref) => (this.el = ref)} />
